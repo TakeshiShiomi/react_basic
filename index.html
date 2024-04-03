@@ -28,16 +28,29 @@
         );
       };
       const App = () => {
+        const menus = [
+          {name: 'ハンバーガー', price: 100},
+          {name: 'ポテト', price: 200},
+          {name: 'ドリンク', price: 150},
+        ];
+
+        const menuItems = menus.map((menu, index) => {
+          return(
+            <Menu
+              name= {menu.name}
+              price= {menu.price}
+              // リストにはkeyでユニークにする
+              key= {index}
+            />
+          );
+        });
         return(
         // 複数の要素を返すためにReact.Fragment <></>を使用
         <>
           <h1>メニュー</h1>
           {/* HTMLでスタイルを指定するとき、class属性を使うが、ReactのJSXでは、classじゃなくてclassNameを使う */}
           <ul className= "menus">
-            {/* Menuコンポーネントとして切り出し */}
-            <Menu name= "ハンバーガー" price= "100"/>
-            <Menu name= "ポテト" price= "200"/>
-            <Menu name= "ドリンク" price= "150"/>
+            {menuItems}
           </ul>
           <p>合計</p>
         </>
