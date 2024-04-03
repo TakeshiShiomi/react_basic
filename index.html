@@ -18,8 +18,16 @@
       const container = document.querySelector('#container');
       const root = ReactDOM.createRoot(container);
       root.render(
-        <h1>メニュー</h1>
-      )
+        <> // 複数の要素を返すためにReact.Fragmentを使用
+          <h1>メニュー</h1>
+          <ul>
+            <li>ハンバーガー</li>
+            <li>ポテト</li>
+            <li>ドリンク</li>
+          </ul>
+          <p>合計</p>
+        </>
+      );
     }
   </script>
 </body>
