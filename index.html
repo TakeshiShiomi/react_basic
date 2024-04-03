@@ -7,11 +7,89 @@
   <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>My React App</h1>
-  
+  <div id="container"></div>
+
   <script type="text/babel">
+    'use strict';
+
+    {
+      // Reactコンポーネントは互いにやりとりをする際propsを使う。親コンポーネントは子コンポーネントにpropsを渡すことで情報を伝えることができる
+      // propsはHTMLの属性と似ているが、propsではオブジェクトや配列、関数などのあらゆるJavaScriptの値を渡すことができる
+      const Menu = (props) => {
+        const decrement = () => {
+          // App component function
+          props.onDecrement(props.menuId);
+        };
+        const increment = () => {
+          props.onIncrement(props.menuId);
+        };
+
+        return(
+          <li>
+            <button onClick ={decrement}>-</button>
+            <button onClick ={increment}>+</button>
+            {props.name} ({props.price}円 x {props.count}個)
+          </li>
+        );
+      };
+      const App = () => {
+        // useState()は、関数コンポーネントでstateを管理（stateの保持と更新）するためのReactフックであり、最も利用されるフック
+        // counts という名前の state 変数を宣言、初期値 0をセット
+        const [counts, setCounts] = React.useState([0, 0, 0]);
+        const menus = [
+          {name: 'ハンバーガー', price: 100},
+          {name: 'ポテト', price: 200},
+          {name: 'ドリンク', price: 150},
+        ];
+        const total = (menus[0].price * counts[0]) +
+                      (menus[1].price * counts[1]) +
+                      (menus[2].price * counts[2]);
+        const decrementMenu = (menuId) => {
+          if (counts[menuId] > 0) {
+            const newCounts = [...counts];
+            newCounts[menuId]--;
+            setCounts(newCounts);
+          }
+        };
+        const incrementMenu = (menuId) => {
+          const newCounts = [...counts];
+            newCounts[menuId]++;
+            setCounts(newCounts);
+        };
+        const menuItems = menus.map((menu, index) => {
+          return(
+            <Menu
+              name= {menu.name}
+              price= {menu.price}
+              count = {counts[index]}
+              onDecrement = {decrementMenu}
+              onIncrement = {incrementMenu}
+              // リストにはkeyでユニークにする。keyはpropsできない
+              key= {index}
+              menuId= {index}
+            />
+          );
+        });
+        return(
+        // 複数の要素を返すためにReact.Fragment <></>を使用
+        <>
+          <h1>メニュー</h1>
+          {/* HTMLでスタイルを指定するとき、class属性を使うが、ReactのJSXでは、classじゃなくてclassNameを使う */}
+          <ul className= "menus">
+            {menuItems}
+          </ul>
+          <p>合計: {total}円</p>
+        </>
+        );
+      };
+      const container = document.querySelector('#container');
+      const root = ReactDOM.createRoot(container);
+      // コンポーネントとしてAppをレンダリング
+      root.render(<App />);
+    }
   </script>
 </body>
 </html>
