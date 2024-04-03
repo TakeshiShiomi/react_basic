@@ -16,21 +16,37 @@
     'use strict';
 
     {
-      const container = document.querySelector('#container');
-      const root = ReactDOM.createRoot(container);
-      root.render(
+      // Reactコンポーネントは互いにやりとりをする際propsを使う。親コンポーネントは子コンポーネントにpropsを渡すことで情報を伝えることができる
+      // propsはHTMLの属性と似ているが、propsではオブジェクトや配列、関数などのあらゆるJavaScriptの値を渡すことができる
+      const Menu = (props) => {
+        return(
+          <li>
+            <button>-</button>
+            <button>+</button>
+            {props.name} ({props.price}円 x 0個)
+          </li>
+        );
+      };
+      const App = () => {
+        return(
         // 複数の要素を返すためにReact.Fragment <></>を使用
         <>
           <h1>メニュー</h1>
           {/* HTMLでスタイルを指定するとき、class属性を使うが、ReactのJSXでは、classじゃなくてclassNameを使う */}
           <ul className= "menus">
-            <li>ハンバーガー</li>
-            <li>ポテト</li>
-            <li>ドリンク</li>
+            {/* Menuコンポーネントとして切り出し */}
+            <Menu name= "ハンバーガー" price= "100"/>
+            <Menu name= "ポテト" price= "200"/>
+            <Menu name= "ドリンク" price= "150"/>
           </ul>
           <p>合計</p>
         </>
-      );
+        );
+      };
+      const container = document.querySelector('#container');
+      const root = ReactDOM.createRoot(container);
+      // コンポーネントとしてAppをレンダリング
+      root.render(<App />);
     }
   </script>
 </body>
